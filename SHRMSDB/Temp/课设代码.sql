@@ -1,0 +1,67 @@
+--一、建数据库
+--create database SHRMS
+--on
+--primary(name=data,
+--filename='D:\我的文件\我的大学\大学学习课程\大二\大二下\大二下课程\《Java程序设计》及《数据库原理》课程设计\学校人力资源管理系统数据库\data.mdf',
+--size=10,
+--maxsize=100,
+--filegrowth=5
+--)
+--log on
+--(name=log,
+--filename='D:\我的文件\我的大学\大学学习课程\大二\大二下\大二下课程\《Java程序设计》及《数据库原理》课程设计\学校人力资源管理系统数据库\log.ldf',
+--size=10,
+--maxsize=50,
+--filegrowth=5
+--)
+--二、建立表
+--1、学校部门信息表：部门编号（sno），部门电话(stno)，部门名称(sname)，领导工号(tno)
+--use SHRMS
+--create table sdept
+--(sno char(10) Primary key,
+--sname char(8) not null,
+--stno char(11),
+--tno char(10)
+--);
+--2、职工信息表：职工工号(tno)，部门编号(sno)，职称(cname)，职工姓名(name)，性别(sex)、年龄（age）
+--create table teacher
+--(tno char(10) primary key,
+--name char(8) unique,
+--sex char(2) default '男' check(sex='男' or sex='女'),
+--age smallint check(age>=25 and age<=70),
+--cname char(8),
+--sno char(10),
+--);
+--3、学籍经历：学籍编号(scno)，职工编号(tno)、小学(ps)，初中(js)，
+---高中(hs)，本科(cs)，研究生(gs)，博士(doc)
+--create table school
+--(scno char(10) primary key,
+--tno char(10),
+--ps char(8),
+--js char(8),
+--hs char(8),
+--cs char(8),
+--gs char(8),
+--doc char(8)
+--);
+--4、奖惩信息表：奖惩编号(rno)，职工工号(tno)，涉及金额(mno)
+--注：（r——reward、m——money）
+--create table reward
+--(rno char(10) primary key,
+--tno char(10),
+--mno int,
+--);
+
+--sqlsever在已经建立表的情况下，建立主外键。索引约束
+--alter table footprint add constraint pk_footprint primary key (uid,pid) --添加主键约束
+--alter table footprint add constraint FK_product_footprint foreign key(pid) references product(pid) --添加外键
+--alter table footprint add constraint FK_users_footprint foreign key(uid) references users(id) --添加外键
+--alert table footprint add index FK_Reference_product_cart (pid) --添加索引
+--alter table 表名 drop constraint 主键名 -- 删除主键约束
+
+--1、给teacher表建立sno依赖于sdept表的外码约束
+--alter table teacher add constraint FK_sdept_teacher foreign key(sno) references sdept(sno)
+--2、给school表建立sno依赖于teacher表的外码约束
+--alter table school add foreign key(tno) references teacher(tno)
+--2、给school表建立sno依赖于teacher表的外码约束
+--alter table reward add foreign key(tno) references teacher(tno)
